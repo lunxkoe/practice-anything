@@ -6,6 +6,13 @@ logging:
   level:
     root: info
 
+auth-system:
+  security:
+    token:
+      access-token-expiration: 15m
+      refresh-token-expiration: 14d
+      access-secret: ${TOKEN_ACCESS_SECRET:}
+      refresh-secret: ${TOKEN_REFRESH_SECRET:}
 ---
 spring:
   config:

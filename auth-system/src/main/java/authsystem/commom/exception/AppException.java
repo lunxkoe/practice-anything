@@ -10,9 +10,9 @@ public abstract class AppException extends RuntimeException {
   private final HttpStatus status;
   private final Map<String, Object> details;
 
-  protected AppException(String message, Throwable cause, boolean enableSuppression,
-      boolean writableStackTrace, HttpStatus status, Map<String, Object> details) {
-    super(message, cause, enableSuppression, writableStackTrace);
+  public AppException(HttpStatus status, String message, Map<String, Object> details,
+      Throwable cause) {
+    super(message, cause);
     this.status = status;
     this.details = details;
   }
