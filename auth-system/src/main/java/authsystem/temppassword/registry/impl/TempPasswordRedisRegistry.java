@@ -51,7 +51,7 @@ public class TempPasswordRedisRegistry implements TempPasswordRegistry {
   }
 
   @Override
-  public int getExpiration() {
+  public int getExpirationMinutes() {
     return (int) tempPasswordProperties.expiration().toMinutes();
   }
 

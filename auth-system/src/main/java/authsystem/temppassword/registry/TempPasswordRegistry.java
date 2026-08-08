@@ -19,5 +19,5 @@ public interface TempPasswordRegistry {
 
   boolean matches(UUID userId, String rawPassword);
 
-  int getExpiration();
+  int getExpirationMinutes();
 }
