@@ -1,4 +1,4 @@
-package authsystem.commom.exception;
+package authsystem.common.exception;
 
 import java.util.Map;
 import java.util.stream.Collectors;

@@ -1,4 +1,4 @@
-package authsystem.commom.dto;
+package authsystem.common.dto;
 
 public enum SortDirection {
   ASCENDING,

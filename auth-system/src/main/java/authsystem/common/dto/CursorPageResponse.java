@@ -1,4 +1,4 @@
-package authsystem.commom.dto;
+package authsystem.common.dto;
 
 import java.util.List;
 import java.util.UUID;

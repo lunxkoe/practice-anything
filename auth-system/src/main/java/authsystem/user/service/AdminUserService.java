@@ -1,6 +1,6 @@
 package authsystem.user.service;
 
-import authsystem.commom.dto.CursorPageResponse;
+import authsystem.common.dto.CursorPageResponse;
 import authsystem.security.core.session.registry.UserSessionRegistry;
 import authsystem.user.dto.request.UserListParams;
 import authsystem.user.dto.request.UserLockUpdateRequest;

@@ -1,4 +1,4 @@
-package authsystem.commom.config;
+package authsystem.common.config;
 
 import java.time.Clock;
 import org.springframework.context.annotation.Bean;

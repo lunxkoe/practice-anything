@@ -1,6 +1,6 @@
 package authsystem.security.core.session.exception.business;
 
-import authsystem.commom.exception.AppException;
+import authsystem.common.exception.AppException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 

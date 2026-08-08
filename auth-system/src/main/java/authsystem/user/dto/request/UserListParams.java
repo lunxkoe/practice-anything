@@ -1,6 +1,6 @@
 package authsystem.user.dto.request;
 
-import authsystem.commom.dto.SortDirection;
+import authsystem.common.dto.SortDirection;
 import authsystem.user.entity.enums.Role;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;

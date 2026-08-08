@@ -3,8 +3,8 @@ package authsystem.user.repository.querydsl.impl;
 
 import static authsystem.user.entity.QUser.user;
 
-import authsystem.commom.dto.CursorPageResponse;
-import authsystem.commom.dto.SortDirection;
+import authsystem.common.dto.CursorPageResponse;
+import authsystem.common.dto.SortDirection;
 import authsystem.user.dto.request.UserListParams;
 import authsystem.user.dto.response.UserDto;
 import authsystem.user.entity.enums.Role;

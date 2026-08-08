@@ -1,4 +1,4 @@
-package authsystem.commom.event;
+package authsystem.common.event;
 
 import java.time.Instant;
 import java.util.Map;

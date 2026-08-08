@@ -1,4 +1,4 @@
-package authsystem.commom.config;
+package authsystem.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
