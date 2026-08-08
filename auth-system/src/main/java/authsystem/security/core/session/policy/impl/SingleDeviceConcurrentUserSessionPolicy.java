@@ -16,4 +16,3 @@ public class SingleDeviceConcurrentUserSessionPolicy implements ConcurrentUserSe
     return registry.issueExclusive(userId, now);
   }
 }
-
