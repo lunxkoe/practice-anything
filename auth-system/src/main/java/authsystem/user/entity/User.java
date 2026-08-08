@@ -1,6 +1,5 @@
 package authsystem.user.entity;
 
-import aQute.bnd.annotation.metatype.Meta.OCD;
 import authsystem.user.entity.enums.LockReason;
 import authsystem.user.entity.enums.Role;
 import jakarta.persistence.Column;
