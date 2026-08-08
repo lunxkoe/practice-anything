@@ -1,7 +1,7 @@
 package authsystem.commom.dto;
 
 import java.util.List;
-import org.hibernate.validator.constraints.UUID;
+import java.util.UUID;
 
 public record CursorPageResponse<T>(
     List<T> data,
