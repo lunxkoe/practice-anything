@@ -11,13 +11,14 @@ auth-system:
     token:
       access-token-expiration: 15m
       refresh-token-expiration: 14d
-      access-secret: ${TOKEN_ACCESS_SECRET:}
-      refresh-secret: ${TOKEN_REFRESH_SECRET:}
+      access-secret: ${ACCESS_SECRET:}
+      refresh-secret: ${REFRESH_SECRET:}
       impl: nimbus
 
     user-session:
       user-session-expiration: 14d
-      concurrent-policy: absolute
+      concurrent-policy: single
+      expiration-policy: absolute
       impl: redis
 
     refresh-cookie:
@@ -26,7 +27,12 @@ auth-system:
 
   temp-password:
     expiration: 3m
-    
+
+  admin:
+    email: admin@email.com
+    password: admin123!
+    name: '최고 관리자'
+
 ---
 spring:
   config:

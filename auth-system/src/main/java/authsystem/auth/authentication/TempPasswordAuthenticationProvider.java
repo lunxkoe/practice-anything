@@ -7,6 +7,7 @@ import authsystem.temppassword.registry.TempPasswordRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -28,6 +29,10 @@ public class TempPasswordAuthenticationProvider implements AuthenticationProvide
 
     if (!tempPasswordRegistry.matches(user.id(), rawPassword)) {
       throw new BadCredentialsException("자격 증명이 올바르지 않습니다.");
+    }
+
+    if (user.locked()) {
+      throw new LockedException("계정이 잠겨 있습니다.");
     }
 
     CustomUserDetails principal = new CustomUserDetails(user, null);

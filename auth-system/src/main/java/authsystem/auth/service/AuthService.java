@@ -42,7 +42,6 @@ public class AuthService {
   private final AuthenticationManager authenticationManager;
   private final AuthMapper authMapper;
   private final SecurityUserPort securityUserPort;
-  private final TempPasswordGenerator tempPasswordGenerator;
   private final TempPasswordRegistry tempPasswordRegistry;
   private final ApplicationEventPublisher eventPublisher;
   private final Clock clock;
@@ -96,8 +95,7 @@ public class AuthService {
   public void resetPassword(ResetPasswordRequest request) {
     securityUserPort.findByEmail(request.email())
         .ifPresent(user -> {
-          String rawTempPassword = tempPasswordGenerator.generate();
-          tempPasswordRegistry.save(user.id(), rawTempPassword);
+          String rawTempPassword = tempPasswordRegistry.issue(user.id());
           eventPublisher.publishEvent(
               new TempPasswordRequestedEvent(user.email(), rawTempPassword,
                   tempPasswordRegistry.getExpirationMinutes()));

@@ -1,7 +1,7 @@
 package authsystem.auth.dto.response;
 
 public record JwtDto(
-    AuthUserDto user,
+    AuthUserDto userDto,
     String accessToken
 ) {
 

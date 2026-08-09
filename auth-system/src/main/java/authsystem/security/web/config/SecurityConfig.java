@@ -4,6 +4,7 @@ import authsystem.security.core.session.registry.UserSessionRegistry;
 import authsystem.security.core.token.provider.TokenProvider;
 import authsystem.security.web.details.CustomUserDetailsService;
 import authsystem.security.web.exception.ErrorResponseWriter;
+import authsystem.security.web.filter.CsrfCookieFilter;
 import authsystem.security.web.filter.TokenAuthenticationFilter;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import tools.jackson.databind.json.JsonMapper;
@@ -60,6 +62,7 @@ public class SecurityConfig {
     http.csrf(csrf -> csrf
         .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
         .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler())
+        .sessionAuthenticationStrategy(new NullAuthenticatedSessionStrategy())
     );
 
     http.sessionManagement(session -> session
@@ -70,6 +73,11 @@ public class SecurityConfig {
         new TokenAuthenticationFilter(tokenProvider, userSessionRegistry),
         UsernamePasswordAuthenticationFilter.class
     );
+
+//    http.addFilterBefore(
+//        new CsrfCookieFilter(),
+//        UsernamePasswordAuthenticationFilter.class
+//    );
 
     http.exceptionHandling(ex -> ex
         .authenticationEntryPoint((request, response, authException) ->
