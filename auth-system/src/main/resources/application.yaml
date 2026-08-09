@@ -25,6 +25,11 @@ auth-system:
       refresh-token-expiration: 14d
       secure: false
 
+    login-attempt:
+      max-attempts: 5
+      window: 10m
+      impl: redis
+
   temp-password:
     expiration: 3m
 
@@ -52,7 +57,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     open-in-view: false
     properties:
       hibernate:

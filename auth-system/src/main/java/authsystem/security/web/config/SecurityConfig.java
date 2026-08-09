@@ -4,7 +4,6 @@ import authsystem.security.core.session.registry.UserSessionRegistry;
 import authsystem.security.core.token.provider.TokenProvider;
 import authsystem.security.web.details.CustomUserDetailsService;
 import authsystem.security.web.exception.ErrorResponseWriter;
-import authsystem.security.web.filter.CsrfCookieFilter;
 import authsystem.security.web.filter.TokenAuthenticationFilter;
 import java.util.List;
 import org.springframework.context.annotation.Bean;

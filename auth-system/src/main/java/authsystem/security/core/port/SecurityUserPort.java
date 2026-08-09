@@ -8,4 +8,6 @@ public interface SecurityUserPort {
   Optional<SecurityUserView> findByEmail(String email);
 
   Optional<SecurityUserView> findById(UUID userId);
+
+  void lock(UUID userId, String reason);
 }

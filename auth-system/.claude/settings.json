@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(./gradlew compileJava --console=plain -q)"
+      "Bash(./gradlew compileJava --console=plain -q)",
+      "WebFetch(domain:developers.kakao.com)",
+      "WebFetch(domain:var.gg)"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\isyz9\\Desktop\\lunxkoe\\auth-system-guide"
     ]
   }
 }

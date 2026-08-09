@@ -7,6 +7,8 @@ import authsystem.auth.dto.response.SignInDto;
 import authsystem.auth.event.request.TempPasswordRequestedEvent;
 import authsystem.auth.exception.AccountLockedException;
 import authsystem.auth.exception.InvalidCredentialsException;
+import authsystem.auth.loginattempt.registry.LoginAttemptRegistry;
+import authsystem.auth.loginattempt.service.LoginAttemptService;
 import authsystem.auth.mapper.AuthMapper;
 import authsystem.security.core.port.SecurityUserPort;
 import authsystem.security.core.port.SecurityUserView;
@@ -17,7 +19,6 @@ import authsystem.security.core.token.dto.RefreshTokenClaims;
 import authsystem.security.core.token.exception.business.InvalidRefreshTokenException;
 import authsystem.security.core.token.exception.business.TokenException;
 import authsystem.security.core.token.provider.TokenProvider;
-import authsystem.temppassword.generator.TempPasswordGenerator;
 import authsystem.temppassword.registry.TempPasswordRegistry;
 import java.time.Clock;
 import java.time.Instant;
@@ -46,6 +47,8 @@ public class AuthService {
   private final ApplicationEventPublisher eventPublisher;
   private final Clock clock;
 
+  private final LoginAttemptService loginAttemptService;
+
   public void signOut(String refreshToken) {
     if (!StringUtils.hasText(refreshToken)) {
       return;
@@ -63,6 +66,9 @@ public class AuthService {
 
   public SignInDto signIn(SignInRequest request) {
     Authentication authentication = authenticate(request);
+
+    // 로그인 성공 시 (3회 실패 후 성공)
+    loginAttemptService.handleSuccessAttempt(request.username());
 
     CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
     SecurityUserView user = principal.getSecurityUser();
@@ -88,6 +94,7 @@ public class AuthService {
     } catch (LockedException e) {
       throw AccountLockedException.withNone();
     } catch (AuthenticationException e) {
+      loginAttemptService.handleFailedAttempt(request.username());
       throw InvalidCredentialsException.withNone();
     }
   }

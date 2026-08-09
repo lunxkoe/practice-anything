@@ -11,5 +11,5 @@ public record AuthUserDto(
     String role,
     boolean locked
 ) {
-  
+
 }
