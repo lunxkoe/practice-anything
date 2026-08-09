@@ -58,11 +58,11 @@ public class UserService {
 
     User foundUser = getFoundUser(userId);
 
-    if (!passwordEncoder.matches(request.currentPassword(), foundUser.getPassword())) {
-      throw InvalidCurrentPasswordException.withNone();
-    }
+//    if (!passwordEncoder.matches(request.currentPassword(), foundUser.getPassword())) {
+//      throw InvalidCurrentPasswordException.withNone();
+//    }
 
-    foundUser.changePassword(passwordEncoder.encode(request.newPassword()));
+    foundUser.changePassword(passwordEncoder.encode(request.password()));
 
     userSessionRegistry.revokeAll(userId);
   }
