@@ -52,8 +52,9 @@ public class SecurityConfig {
       JsonMapper jsonMapper,
       TokenProvider tokenProvider,
       UserSessionRegistry userSessionRegistry,
-      List<SecurityAuthorizationRules> authorizationRulesList
-  ) {
+      List<SecurityAuthorizationRules> authorizationRulesList,
+      List<HttpSecurityCustomizer> customizers
+  ) throws Exception {
     http.formLogin(AbstractHttpConfigurer::disable);
     http.httpBasic(AbstractHttpConfigurer::disable);
     http.logout(AbstractHttpConfigurer::disable);
@@ -94,8 +95,13 @@ public class SecurityConfig {
       for (SecurityAuthorizationRules rules : authorizationRulesList) {
         rules.configure(registry);
       }
+
       registry.anyRequest().authenticated();
     });
+
+    for (HttpSecurityCustomizer customizer : customizers) {
+      customizer.customize(http);
+    }
 
     return http.build();
   }

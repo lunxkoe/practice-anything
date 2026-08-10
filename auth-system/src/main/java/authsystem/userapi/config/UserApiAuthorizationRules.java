@@ -20,6 +20,7 @@ public class UserApiAuthorizationRules implements SecurityAuthorizationRules {
         .requestMatchers("/", "/index.html", "/favicon.ico", "/css/**", "/js/**", "/images/**",
             "/assets/**", "/logo_symbol.svg", "/vite.svg").permitAll()
         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-        .requestMatchers("/uploads/**").permitAll();
+        .requestMatchers("/uploads/**").permitAll()
+        .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**").permitAll();
   }
 }

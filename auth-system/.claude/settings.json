@@ -3,7 +3,10 @@
     "allow": [
       "Bash(./gradlew compileJava --console=plain -q)",
       "WebFetch(domain:developers.kakao.com)",
-      "WebFetch(domain:var.gg)"
+      "WebFetch(domain:var.gg)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(echo \"checkignore-exit:$?\")",
+      "WebFetch(domain:devtalk.kakao.com)"
     ],
     "additionalDirectories": [
       "C:\\Users\\isyz9\\Desktop\\lunxkoe\\auth-system-guide"
