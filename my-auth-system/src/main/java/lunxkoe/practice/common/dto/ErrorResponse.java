@@ -1,4 +1,4 @@
-package lunxkoe.practice.common.exception;
+package lunxkoe.practice.common.dto;
 
 import java.util.Map;
 
