@@ -26,7 +26,7 @@ public class SecurityConfig {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     );
 
-    // TODO: TokenAuthentication Filter 설정 추가
+    // TODO: Token Authentication Filter 설정 추가
 
     http.authorizeHttpRequests(auth -> auth
         .anyRequest().permitAll()
