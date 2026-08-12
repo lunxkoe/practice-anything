@@ -33,6 +33,8 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.GET, "/api/sandbox/my").hasAnyAuthority("USER", "ADMIN")
         .requestMatchers(HttpMethod.GET, "/api/sandbox/admin").hasAuthority("ADMIN")
 
+        .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+
         .anyRequest().authenticated()
     );
 
