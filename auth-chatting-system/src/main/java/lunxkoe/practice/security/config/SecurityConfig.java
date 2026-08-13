@@ -62,6 +62,8 @@ public class SecurityConfig {
 
         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("ADMIN")
+        .requestMatchers(HttpMethod.POST, "/api/auth/sign-in").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/auth/sign-out").permitAll()
 
         .anyRequest().authenticated()
     );

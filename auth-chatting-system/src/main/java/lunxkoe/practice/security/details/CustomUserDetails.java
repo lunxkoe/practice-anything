@@ -2,7 +2,7 @@ package lunxkoe.practice.security.details;
 
 import java.util.Collection;
 import java.util.List;
-import lunxkoe.practice.domain.user.entity.User;
+import lunxkoe.practice.domain.user.dto.response.UserDto;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,21 +10,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class CustomUserDetails implements UserDetails, CredentialsContainer {
 
-  private final User user;
+  private UserDto userDto;
   private String password;
 
-  public CustomUserDetails(User user, String password) {
-    this.user = user;
+  public CustomUserDetails(UserDto userDto, String password) {
+    this.userDto = userDto;
     this.password = password;
   }
 
-  public User getUser() {
-    return user;
+  public UserDto getUserDto() {
+    return userDto;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(new SimpleGrantedAuthority(user.getRole().name()));
+    return List.of(new SimpleGrantedAuthority(userDto.role().name()));
   }
 
   @Override
@@ -34,12 +34,12 @@ public class CustomUserDetails implements UserDetails, CredentialsContainer {
 
   @Override
   public String getUsername() {
-    return user.getEmail();
+    return userDto.email();
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return !user.isLocked();
+    return !userDto.locked();
   }
 
   @Override
