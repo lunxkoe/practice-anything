@@ -11,8 +11,8 @@ app:
     token:
       access-token-expiration: 15m
       refresh-token-expiration: 14d
-      access-secret: ${ACCESS_SECRET:}
-      refresh-secret: ${REFRESH_SECRET:}
+      access-secret: ${ACCESS_SECRET:c2hvdWxkLWJlLWF0LWxlYXN0LTMyLWJ5dGVzLWxvbmctc2VjcmV0LWtleS1mb3ItaHMyNTY=}
+      refresh-secret: ${REFRESH_SECRET:c2hvdWxkLWJlLWF0LWxlYXN0LTMyLWJ5dGVzLWxvbmctc2VjcmV0LWtleS1mb3ItaHMyNTY=}
       issuer: practice-auth
       audience: practice-client
       impl: nimbus # 필수 값은 아님. 없으면 nimbus를 Default로 사용함
@@ -24,7 +24,7 @@ app:
       concurrent-policy: multi # 없으면 multi 기본
 
     refresh-cookie:
-      refresh-token-expiration: 14d
+      refresh-token-expiration: 13d
       secure: false # prod는 항상 true
 
 ---
