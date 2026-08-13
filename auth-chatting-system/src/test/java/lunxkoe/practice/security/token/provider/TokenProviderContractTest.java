@@ -249,7 +249,7 @@ abstract class TokenProviderContractTest {
 
   private TokenProperties properties(String accessSecret, String refreshSecret) {
     return new TokenProperties(
-        ACCESS_EXPIRATION, REFRESH_EXPIRATION, accessSecret, refreshSecret, ISSUER, AUDIENCE);
+        ACCESS_EXPIRATION, REFRESH_EXPIRATION, accessSecret, refreshSecret, ISSUER, AUDIENCE, null);
   }
 
   private TokenProvider providerWithClock(Instant instant) {

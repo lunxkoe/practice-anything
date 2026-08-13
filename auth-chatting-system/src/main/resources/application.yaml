@@ -23,6 +23,10 @@ app:
       expiration-policy: absolute # 없으면 absolute 기본
       concurrent-policy: multi # 없으면 multi 기본
 
+    refresh-cookie:
+      refresh-token-expiration: 14d
+      secure: false # prod는 항상 true
+
 ---
 spring:
   config:

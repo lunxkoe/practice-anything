@@ -1,18 +1,42 @@
 package lunxkoe.practice.security.config;
 
+import java.util.List;
+import lunxkoe.practice.security.exception.ErrorResponseWriter;
+import lunxkoe.practice.security.filter.TokenAuthenticationFilter;
+import lunxkoe.practice.security.token.provider.TokenProvider;
+import lunxkoe.practice.security.usersession.registry.UserSessionRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AnyRequestMatcher;
+import tools.jackson.databind.json.JsonMapper;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public AuthenticationManager authenticationManager(List<AuthenticationProvider> providers) {
+    return new ProviderManager(providers);
+  }
+
+  @Bean
+  public SecurityFilterChain filterChain(
+      HttpSecurity http,
+      TokenProvider tokenProvider,
+      UserSessionRegistry userSessionRegistry,
+      JsonMapper jsonMapper
+  ) throws Exception {
 
     http.formLogin(AbstractHttpConfigurer::disable);
     http.httpBasic(AbstractHttpConfigurer::disable);
@@ -25,7 +49,10 @@ public class SecurityConfig {
         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
     );
 
-    // TODO: Token Authentication Filter 설정 추가
+    http.addFilterBefore(
+        new TokenAuthenticationFilter(tokenProvider, userSessionRegistry),
+        UsernamePasswordAuthenticationFilter.class
+    );
 
     http.authorizeHttpRequests(auth -> auth
 
@@ -39,7 +66,15 @@ public class SecurityConfig {
         .anyRequest().authenticated()
     );
 
-    // TODO: Security Exception Handler 설정 추가
+    http.exceptionHandling(ex -> ex
+        .defaultAuthenticationEntryPointFor((request, response, authException) ->
+            ErrorResponseWriter.write(response, jsonMapper, HttpStatus.UNAUTHORIZED,
+                authException, "인증이 필요합니다."), AnyRequestMatcher.INSTANCE)
+
+        .accessDeniedHandler((request, response, accessDeniedException) ->
+            ErrorResponseWriter.write(response, jsonMapper, HttpStatus.FORBIDDEN,
+                accessDeniedException, "접근 권한이 없습니다."))
+    );
 
     // TODO: OAuth2 설정 추가
 

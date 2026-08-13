@@ -20,7 +20,24 @@ public record UserSessionProperties(
 
     @Min(value = 1, message = "maxDevices는 1 이상이어야 합니다.")
     @Max(value = 20, message = "maxDevices는 20을 넘을 수 없습니다.")
-    int maxDevices
+    int maxDevices,
+
+    ExpirationPolicyType expirationPolicy,
+
+    ConcurrentPolicyType concurrentPolicy,
+
+    UserSessionRegistryType impl
 ) {
 
+  public UserSessionProperties {
+    if (expirationPolicy == null) {
+      expirationPolicy = ExpirationPolicyType.ABSOLUTE;
+    }
+    if (concurrentPolicy == null) {
+      concurrentPolicy = ConcurrentPolicyType.MULTI;
+    }
+    if (impl == null) {
+      impl = UserSessionRegistryType.REDIS;
+    }
+  }
 }
