@@ -6,6 +6,23 @@ logging:
   level:
     root: info
 
+app:
+  security:
+    token:
+      access-token-expiration: 15m
+      refresh-token-expiration: 14d
+      access-secret: ${ACCESS_SECRET:}
+      refresh-secret: ${REFRESH_SECRET:}
+      issuer: practice-auth
+      audience: practice-client
+      impl: nimbus # 필수 값은 아님. 없으면 nimbus를 Default로 사용함
+
+    user-session:
+      ttl: 14d
+      max-devices: 5
+      expiration-policy: absolute # 없으면 absolute 기본
+      concurrent-policy: multi # 없으면 multi 기본
+
 ---
 spring:
   config:
