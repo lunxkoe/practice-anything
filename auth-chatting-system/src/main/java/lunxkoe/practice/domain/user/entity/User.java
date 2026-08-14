@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.AccessLevel;
@@ -17,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lunxkoe.practice.domain.user.entity.enums.LockReason;
 import lunxkoe.practice.domain.user.entity.enums.Role;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -79,5 +81,27 @@ public class User {
 
   public static User create(String email, String encodedPassword, String name) {
     return new User(email, encodedPassword, name, Role.USER, false, LockReason.NONE);
+  }
+
+  public void changeRole(Role role) {
+    this.role = role;
+  }
+
+  public void lock(LockReason lockReason) {
+    this.locked = true;
+    this.lockReason = lockReason;
+  }
+
+  public void unlock() {
+    this.locked = false;
+    this.lockReason = LockReason.NONE;
+  }
+
+  public void changePassword(String encodePassword) {
+    this.password = encodePassword;
+  }
+
+  public void changeName(String name) {
+    this.name = name;
   }
 }

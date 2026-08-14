@@ -70,4 +70,15 @@ public class Profile {
   public static Profile create(User user) {
     return new Profile(user, DEFAULT_TEMPERATURE_SENSITIVITY);
   }
+
+  public void changeProfile(Gender newGender, LocalDate newBirthDate, Location newLocation, int newTemperatureSensitivity) {
+    this.gender = newGender;
+    this.birthDate = newBirthDate;
+    this.location = newLocation;
+    this.temperatureSensitivity = newTemperatureSensitivity;
+  }
+
+  public void changeProfileImageUrl(String newProfileImageUrl) {
+    this.profileImageUrl = newProfileImageUrl;
+  }
 }

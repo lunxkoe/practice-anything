@@ -48,6 +48,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
+    // S3
+    implementation platform('software.amazon.awssdk:bom:2.51.4')
+    implementation 'software.amazon.awssdk:s3'
+
     // WebSocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 

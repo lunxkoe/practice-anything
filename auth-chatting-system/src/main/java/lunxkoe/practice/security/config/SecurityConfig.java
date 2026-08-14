@@ -62,6 +62,8 @@ public class SecurityConfig {
 
         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
         .requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("ADMIN")
+        .requestMatchers(HttpMethod.PATCH, "/api/users/{userId}/role").hasAuthority("ADMIN")
+        .requestMatchers(HttpMethod.PATCH, "/api/users/{userId}/lock").hasAuthority("ADMIN")
         .requestMatchers(HttpMethod.POST, "/api/auth/sign-in").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/auth/sign-out").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()

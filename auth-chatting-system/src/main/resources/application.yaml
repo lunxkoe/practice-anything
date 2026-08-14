@@ -1,12 +1,40 @@
 spring:
   application:
     name: auth-chatting-system
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
 
 logging:
   level:
     root: info
 
 app:
+  file:
+    impl: local
+    public-base-url: http://localhost:8080/uploads
+    max-size-bytes: 5242880
+    allowed-extensions: jpg,jpeg,png,webp
+    local:
+      upload-dir: ./uploads
+  #  file:
+  #    impl: s3
+  #    public-base-url: https://cdn.otboo.us
+  #    max-size-bytes: 5242880
+  #    allowed-extensions: jpg,jpeg,png,webp
+  #    s3:
+  #      bucket: otboo-image
+  #      region: ap-northeast-2
+
+  temp-password:
+    expiration: 3m
+    generator: random
+    impl: redis
+
+  mail:
+    impl: google
+
   security:
     token:
       access-token-expiration: 15m
@@ -26,14 +54,6 @@ app:
     refresh-cookie:
       refresh-token-expiration: 14d
       secure: false # prod는 항상 true
-
-  temp-password:
-    expiration: 3m
-    generator: random
-    impl: redis
-
-  mail:
-    impl: google
 
 ---
 spring:
