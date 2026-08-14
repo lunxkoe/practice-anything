@@ -3,18 +3,26 @@ package lunxkoe.practice.domain.auth.service;
 import java.time.Clock;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
+import lunxkoe.practice.domain.auth.dto.request.ResetPasswordRequest;
 import lunxkoe.practice.domain.auth.dto.request.SignInRequest;
+import lunxkoe.practice.domain.auth.dto.response.RefreshDto;
 import lunxkoe.practice.domain.auth.dto.response.SignInDto;
+import lunxkoe.practice.domain.auth.event.request.TempPasswordRequestedEvent;
 import lunxkoe.practice.domain.auth.exception.AccountLockedException;
 import lunxkoe.practice.domain.auth.exception.InvalidCredentialsException;
 import lunxkoe.practice.domain.auth.mapper.AuthMapper;
 import lunxkoe.practice.domain.user.dto.response.UserDto;
+import lunxkoe.practice.domain.user.entity.User;
+import lunxkoe.practice.domain.user.exception.UserNotFoundException;
+import lunxkoe.practice.domain.user.repository.UserRepository;
+import lunxkoe.practice.global.temppassword.registry.TempPasswordRegistry;
 import lunxkoe.practice.security.details.CustomUserDetails;
 import lunxkoe.practice.security.token.dto.RefreshTokenClaims;
 import lunxkoe.practice.security.token.exception.business.TokenException;
 import lunxkoe.practice.security.token.provider.TokenProvider;
 import lunxkoe.practice.security.usersession.dto.UserSession;
 import lunxkoe.practice.security.usersession.registry.UserSessionRegistry;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -29,11 +37,14 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class AuthService {
 
+  private final UserRepository userRepository;
   private final TokenProvider tokenProvider;
   private final UserSessionRegistry userSessionRegistry;
   private final AuthenticationManager authenticationManager;
   private final Clock clock;
   private final AuthMapper authMapper;
+  private final TempPasswordRegistry tempPasswordRegistry;
+  private final ApplicationEventPublisher eventPublisher;
 
   public void signOut(String refreshToken) {
     if (!StringUtils.hasText(refreshToken)) {
@@ -94,5 +105,51 @@ public class AuthService {
     } catch (AuthenticationException e) {
       throw InvalidCredentialsException.withNone();
     }
+  }
+
+  public void resetPassword(ResetPasswordRequest request) {
+    userRepository.findByEmail(request.email())
+        .ifPresent(user -> {
+          String rawTempPassword = tempPasswordRegistry.issue(user.getId());
+          eventPublisher.publishEvent(
+              new TempPasswordRequestedEvent(user.getEmail(), rawTempPassword,
+                  tempPasswordRegistry.getExpirationMinutes()));
+        });
+  }
+
+  public RefreshDto refresh(String refreshToken) {
+    RefreshTokenClaims claims = tokenProvider.parseRefreshToken(refreshToken);
+
+    User foundUser = userRepository.findById(claims.userId())
+        .orElseThrow(UserNotFoundException::withNone);
+
+    if (foundUser.isLocked()) {
+      userSessionRegistry.revokeAll(foundUser.getId());
+      throw AccountLockedException.withNone();
+    }
+
+    Instant now = Instant.now(clock);
+    UserSession rotated = userSessionRegistry.rotate(
+        foundUser.getId(),
+        claims.sessionId(),
+        claims.jti(),
+        now
+    );
+
+    String newAccessToken = tokenProvider.createAccessToken(
+        foundUser.getId(),
+        rotated.sessionId(),
+        foundUser.getRole().name(),
+        now
+    );
+
+    String newRefreshToken = tokenProvider.createRefreshToken(
+        foundUser.getId(),
+        rotated.sessionId(),
+        rotated.currentRefreshJti(),
+        now
+    );
+
+    return authMapper.refreshDto(foundUser, newAccessToken, newRefreshToken);
   }
 }

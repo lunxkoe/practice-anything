@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -49,6 +50,21 @@ public class GlobalExceptionHandler {
                 exceptionName,
                 message,
                 details
+            )
+        );
+  }
+
+  @ExceptionHandler(MissingRequestCookieException.class)
+  public ResponseEntity<ErrorResponse> handleMissingRequestCookieException(MissingRequestCookieException e) {
+    String exceptionName = e.getClass().getSimpleName();
+    String message = "요청에 필요한 쿠키(" + e.getCookieName() + ")가 없습니다.";
+    log.warn("[{}] {}", exceptionName, message);
+    return ResponseEntity
+        .status(HttpStatus.BAD_REQUEST)
+        .body(new ErrorResponse(
+                exceptionName,
+                message,
+                Map.of()
             )
         );
   }

@@ -64,6 +64,8 @@ public class SecurityConfig {
         .requestMatchers(HttpMethod.GET, "/api/users").hasAuthority("ADMIN")
         .requestMatchers(HttpMethod.POST, "/api/auth/sign-in").permitAll()
         .requestMatchers(HttpMethod.POST, "/api/auth/sign-out").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/auth/reset-password").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
 
         .anyRequest().authenticated()
     );

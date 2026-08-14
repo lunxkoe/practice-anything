@@ -24,8 +24,16 @@ app:
       concurrent-policy: multi # 없으면 multi 기본
 
     refresh-cookie:
-      refresh-token-expiration: 13d
+      refresh-token-expiration: 14d
       secure: false # prod는 항상 true
+
+  temp-password:
+    expiration: 3m
+    generator: random
+    impl: redis
+
+  mail:
+    impl: google
 
 ---
 spring:
@@ -52,6 +60,17 @@ spring:
       hibernate:
         format_sql: true
 #        default_batch_fetch_size: 100
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${CENTURAL_GOOGLE_EMAIL_ADDRESS:}
+    password: ${CENTURAL_GOOGLE_EMAIL_AUTHENTICATION_CODE:}
+    properties:
+      mail:
+        smtp.auth: true
+        smtp.starttls.enable: true
+        smtp.starttls.required: true
 
 logging:
   level:

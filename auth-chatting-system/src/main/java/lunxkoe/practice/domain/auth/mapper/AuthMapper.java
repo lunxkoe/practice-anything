@@ -2,6 +2,7 @@ package lunxkoe.practice.domain.auth.mapper;
 
 import lombok.RequiredArgsConstructor;
 import lunxkoe.practice.domain.auth.dto.response.JwtDto;
+import lunxkoe.practice.domain.auth.dto.response.RefreshDto;
 import lunxkoe.practice.domain.auth.dto.response.SignInDto;
 import lunxkoe.practice.domain.user.dto.response.UserDto;
 import lunxkoe.practice.domain.user.entity.User;
@@ -21,9 +22,23 @@ public class AuthMapper {
     );
   }
 
+  public RefreshDto refreshDto(User user, String accessToken, String refreshToken) {
+    return new RefreshDto(
+        jwtDtoFrom(user, accessToken),
+        refreshToken
+    );
+  }
+
   public JwtDto jwtDtoFrom(UserDto userDto, String accessToken) {
     return new JwtDto(
         userDto,
+        accessToken
+    );
+  }
+
+  public JwtDto jwtDtoFrom(User user, String accessToken) {
+    return new JwtDto(
+        userMapper.userDtoFrom(user),
         accessToken
     );
   }
